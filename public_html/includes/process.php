@@ -4,8 +4,6 @@ include_once("user.php");
 include_once("DBOperation.php");
 include_once("manage.php");
 
-
-
 //For Registration Processsing
 if (isset($_POST["username"]) AND isset($_POST["email"])) {
 	$user = new User();
@@ -311,6 +309,8 @@ if (isset($_POST["order_date"]) AND isset($_POST["cust_name"])) {
 	$m = new Manage();
 	echo $result = $m->storeCustomerOrderInvoice($orderdate,$cust_name,$ar_tqty,$ar_qty,$ar_price,$ar_pro_name,$sub_total,$gst,$discount,$net_total,$paid,$due,$payment_type);
 
+$result = $m->storeCustomerOrderInvoice(...);
+echo (int) $result; // will echo -1 or invoice_no
 
 
 

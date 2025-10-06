@@ -32,6 +32,7 @@
 				    <p class="card-text"><i class="fa fa-user">&nbsp;</i>Admin</p>
 				    <p class="card-text">Last Login : 2025-10-09</p>
 				    <a href="#" class="btn btn-primary"><i class="fa fa-edit">&nbsp;</i>Edit Profile</a>
+					<a href="analysis.php" class="btn btn-primary"><i class="fa fa-edit">&nbsp;</i>Analysis</a>
 				  </div>
 				</div>
 			</div>

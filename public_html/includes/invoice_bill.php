@@ -1,14 +1,9 @@
 <?php
+ob_start();
 session_start();
 include_once("../fpdf/fpdf.php");
 
 if (isset($_GET["order_date"]) && isset($_GET["cust_name"])) {
-
-    // 🔍 DEBUG: See exactly what comes in
-    echo "<pre>";
-    print_r($_GET);
-    echo "</pre>";
-    // exit(); // Uncomment to stop here and check
 
     $pdf = new FPDF();
     $pdf->AddPage();
@@ -29,13 +24,12 @@ if (isset($_GET["order_date"]) && isset($_GET["cust_name"])) {
     $pdf->Cell(40, 10, "Price", 1, 0, "C");
     $pdf->Cell(40, 10, "Total (Rs)", 1, 1, "C");
 
-    // ✅ Safe loop with checks
     if (isset($_GET["pid"]) && is_array($_GET["pid"])) {
         $rowCount = count($_GET["pid"]);
         for ($i = 0; $i < $rowCount; $i++) {
-            $pro_name = isset($_GET["pro_name"][$i]) ? $_GET["pro_name"][$i] : 'N/A';
-            $qty = isset($_GET["qty"][$i]) ? floatval($_GET["qty"][$i]) : 0;
-            $price = isset($_GET["price"][$i]) ? floatval($_GET["price"][$i]) : 0;
+            $pro_name = $_GET["pro_name"][$i] ?? 'N/A';
+            $qty = floatval($_GET["qty"][$i] ?? 0);
+            $price = floatval($_GET["price"][$i] ?? 0);
             $total = $qty * $price;
 
             $pdf->Cell(10, 10, ($i + 1), 1, 0, "C");
@@ -49,7 +43,6 @@ if (isset($_GET["order_date"]) && isset($_GET["cust_name"])) {
     }
 
     $pdf->Cell(50, 10, "", 0, 1);
-
     $pdf->Cell(50, 10, "Sub Total", 0, 0);
     $pdf->Cell(50, 10, ": " . number_format(floatval($_GET["sub_total"] ?? 0), 2), 0, 1);
     $pdf->Cell(50, 10, "GST Tax", 0, 0);
@@ -67,10 +60,14 @@ if (isset($_GET["order_date"]) && isset($_GET["cust_name"])) {
 
     $pdf->Cell(180, 10, "Signature", 0, 0, "R");
 
+    // ✅ Safe user_id handling
+    $user_id = $_SESSION['user_id'] ?? 'guest';
     $pdfDir = realpath(__DIR__ . '/../PDF_INVOICE');
-    $filePath = $pdfDir . "/PDF_INVOICE_" . $_SESSION["userid"] . ".pdf";
+    $filePath = $pdfDir . "/PDF_INVOICE_" . $user_id . ".pdf";
 
     $pdf->Output($filePath, "F");
     $pdf->Output();
 }
+ob_end_flush();
 ?>
+

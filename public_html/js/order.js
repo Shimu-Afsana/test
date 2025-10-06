@@ -54,9 +54,9 @@ $(document).ready(function(){
 			alert("Please enter a valid quantity");
 			qty.val(1);
 		}else{
-			if ((qty.val() - 0) > (tr.find(".tqty").val()-0)) {
+				if ((qty.val() - 0) > (tr.find(".tqty").val()-0)) {
 				alert("Sorry ! This much of quantity is not available");
-				aty.val(1);
+				qty.val(1);
 			}else{
 				tr.find(".amt").html(qty.val() * tr.find(".price").val());
 				calculate(0,0);
@@ -103,13 +103,15 @@ $(document).ready(function(){
 
 	/*Order Accepting*/
 
-	$("#order_button").click(function(){
+	$("#order_button").click(function(e){
+		// Prevent the form from submitting normally so the AJAX handler can complete
+		e.preventDefault();
 
 		var invoice = $("#get_order_data").serialize();
 		if ($("#cust_name").val() === "") {
-			alert("Plaese enter customer name");
+			alert("Please enter customer name");
 		}else if($("#paid").val() === ""){
-			alert("Plaese eneter paid amount");
+			alert("Please enter paid amount");
 		}else{
 			$.ajax({
 				url : DOMAIN+"/includes/process.php",
@@ -121,24 +123,15 @@ $(document).ready(function(){
 						alert(data);
 					}else{
 						$("#get_order_data").trigger("reset");
-
+                            console.log("reached")
 						if (confirm("Do u want to print invoice ?")) {
 							window.location.href = DOMAIN+"/includes/invoice_bill.php?invoice_no="+data+"&"+invoice;
 						}
 					}
 
-						
-						
-
-					
-
 				}
 			});
 		}
-		
-			
-		
-		
 
 	});
 
